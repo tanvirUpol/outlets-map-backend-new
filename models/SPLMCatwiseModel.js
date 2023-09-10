@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const catWiseSchema = new mongoose.Schema({
+const splmCatWiseSchema = new mongoose.Schema({
   outlet_code: {
     type: String,
     required: true
@@ -79,6 +79,6 @@ const catWiseSchema = new mongoose.Schema({
   },
 });
 
-const CatWise = mongoose.model('CatWise', catWiseSchema);
+const SPLMCatWise = mongoose.model('SPLMCatWise', splmCatWiseSchema);
 
-module.exports = CatWise;
+module.exports = SPLMCatWise;

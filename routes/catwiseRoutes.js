@@ -4,14 +4,14 @@ const requireAuth = require("../middleware/requireAuth");
 // constroller functions
 const {
   getCatWiseOutlet,
-  uploadCatWiseData
+  uploadCatWiseData,
+  
 } = require("../controllers/catWiseController");
 
 // requireAuth for all routes
 router.use(requireAuth);
 
-// // get  all products
-// router.get("/", getOutlets);
+
 
 // get single outlet
 router.get("/:id", getCatWiseOutlet);

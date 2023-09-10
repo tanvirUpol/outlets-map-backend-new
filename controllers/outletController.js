@@ -3,8 +3,13 @@ const mongoose = require("mongoose");
 
 // get all
 const getOutlets = async (req, res) => {
-  const outlets = await Outlet.find();
-  res.status(200).json(outlets);
+  if(req.user.is_zonal === false){
+    const outlets = await Outlet.find();
+    res.status(200).json(outlets);
+  }else if(req.user.is_zonal === true){ 
+    const outlets = await Outlet.find({zonal: req.user.zonal});
+    res.status(200).json(outlets);
+  }
 };
 
 // get single Outlet

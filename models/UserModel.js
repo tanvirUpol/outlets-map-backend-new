@@ -14,7 +14,7 @@ const UserSchema = new Schema(
       type: String,
       required: true,
     },
-    outlet_code: {
+    zonal: {
       type: String,
       required: true,
     },
@@ -27,7 +27,7 @@ const UserSchema = new Schema(
 );
 
 // static create user
-UserSchema.statics.signup = async function (email, password, outlet_code , is_outlet) {
+UserSchema.statics.signup = async function (email, password,zonal , is_zonal) {
   if(!email || !password){
     throw new Error("Please enter a valid email and password");
   }
@@ -44,8 +44,8 @@ UserSchema.statics.signup = async function (email, password, outlet_code , is_ou
     const user = await this.create({
       email,
       password: hashedPassword,
-      outlet_code , 
-      is_outlet
+      zonal , 
+      is_zonal
     });
 
     return user;
