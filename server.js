@@ -9,6 +9,8 @@ const outletRoutes = require('./routes/outlets');
 
 const catWiseRoutes = require('./routes/catwiseRoutes');
 
+const catWiseSPLMRoutes = require('./routes/catwiseSPLMroutes');
+
 
 
 //express app
@@ -31,6 +33,8 @@ app.use('/api/user',userRoutes)
 app.use('/api/outlets',outletRoutes)
 
 app.use('/api/cat',catWiseRoutes)
+
+app.use('/api/catm',catWiseSPLMRoutes)
 
 
 
