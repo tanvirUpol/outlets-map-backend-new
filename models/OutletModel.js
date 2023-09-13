@@ -85,6 +85,10 @@ const outletSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  day: {
+    type: Number,
+    required: true
+  },
   division: {
     type: String,
     required: true

@@ -77,6 +77,14 @@ const catWiseSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
+  month: {
+    type: String,
+    required: true
+  },
+  day: {
+    type: Number,
+    required: true
+  }
 });
 
 const CatWise = mongoose.model('CatWise', catWiseSchema);

@@ -17,7 +17,6 @@ const getCatWiseOutlet = async (req, res) => {
 };
 
 // create catwise outlet data
-
 const uploadCatWiseData = async (req, res) => {
   try {
     // Delete all existing documents
