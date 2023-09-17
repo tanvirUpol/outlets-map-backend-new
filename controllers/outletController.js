@@ -7,7 +7,9 @@ const getOutlets = async (req, res) => {
     const outlets = await Outlet.find();
     res.status(200).json(outlets);
   }else if(req.user.is_zonal === true){ 
-    const outlets = await Outlet.find({zonal: req.user.zonal});
+    console.log(req.user);
+    const outlets = await Outlet.find({outlet_code:{ $in: req.user.outlets}});
+    console.log(outlets);
     res.status(200).json(outlets);
   }
 };

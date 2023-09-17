@@ -22,12 +22,16 @@ const UserSchema = new Schema(
       type: Boolean,
       required: true,
     },
+    outlets: {
+      type: Array,
+      require: true
+    }
   },
   { timestamps: true }
 );
 
 // static create user
-UserSchema.statics.signup = async function (email, password,zonal , is_zonal) {
+UserSchema.statics.signup = async function (email, password,zonal , is_zonal, outlets) {
   if(!email || !password){
     throw new Error("Please enter a valid email and password");
   }
@@ -45,7 +49,8 @@ UserSchema.statics.signup = async function (email, password,zonal , is_zonal) {
       email,
       password: hashedPassword,
       zonal , 
-      is_zonal
+      is_zonal,
+      outlets
     });
 
     return user;

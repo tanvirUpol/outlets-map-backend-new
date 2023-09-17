@@ -23,12 +23,12 @@ const loginUser = async (req, res) => {
 // signup user
 const signupUser = async (req, res) => {
   // email, password,outlet_division,role
-  const { email, password , zonal , is_zonal } = req.body;
+  const { email, password , zonal , is_zonal, outlets } = req.body;
 
-  console.log(req.body);
+  // console.log(req.body);
 
   try {
-    const user = await User.signup(email, password, zonal , is_zonal);
+    const user = await User.signup(email, password, zonal , is_zonal, outlets);
 
     // create a token
     const token = createToken(user._id);
@@ -41,7 +41,13 @@ const signupUser = async (req, res) => {
   }
 };
 
+
+const stayAlive = async (req, res ) => {
+  res.status(200).json({ message: "staying alive"})
+}
+
 module.exports = {
   loginUser,
   signupUser,
+  stayAlive,
 };
