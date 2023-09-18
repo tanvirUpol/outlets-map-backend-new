@@ -43,7 +43,7 @@ const signupUser = async (req, res) => {
 
 
 const stayAlive = async (req, res ) => {
-  res.status(200).json({ message: "yeee working"})
+  res.status(200).json({ message: "yeeee working"})
 }
 
 module.exports = {
