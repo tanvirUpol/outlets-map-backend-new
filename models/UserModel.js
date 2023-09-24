@@ -92,4 +92,29 @@ UserSchema.statics.login = async function (email, password) {
   }
 };
 
+
+// Hash the password before saving it
+UserSchema.pre("save", async function (next) {
+  const user = this;
+  if (!user.isModified("password")) return next();
+
+  try {
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(user.password, salt);
+    user.password = hash;
+    next();
+  } catch (error) {
+    return next(error);
+  }
+});
+
+// Compare the provided password with the stored hash
+UserSchema.methods.comparePassword = async function (password) {
+  try {
+    return await bcrypt.compare(password, this.password);
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = mongoose.model("User", UserSchema);

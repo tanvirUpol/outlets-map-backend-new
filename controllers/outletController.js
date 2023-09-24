@@ -18,6 +18,7 @@ const getOutlets = async (req, res) => {
 const getOutlet = async (req, res) => {
   const { id } = req.params;
   if (!mongoose.Types.ObjectId.isValid(id)) {
+    console.log("not a valid id");
     return res.status(404).json({ error: "No Such Outlet" });
   }
 
