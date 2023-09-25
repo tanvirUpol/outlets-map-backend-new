@@ -37,6 +37,8 @@ UserSchema.statics.signup = async function (email, password,zonal , is_zonal, ou
   }
   const exists = await this.findOne({ email });
 
+  console.log(exists);
+
   if (exists) {
     throw new Error("This user already exists");
   }
@@ -72,6 +74,8 @@ UserSchema.statics.login = async function (email, password) {
 
     const valid = await bcrypt.compare(password, user.password);
 
+    console.log(user.password);
+
     if (!valid) {
       throw new Error("Incorrect password");
     }
@@ -94,19 +98,20 @@ UserSchema.statics.login = async function (email, password) {
 
 
 // Hash the password before saving it
-UserSchema.pre("save", async function (next) {
-  const user = this;
-  if (!user.isModified("password")) return next();
+// UserSchema.pre("save", async function (next) {
+//   console.log("hello");
+//   const user = this;
+//   if (!user.isModified("password")) return next();
 
-  try {
-    const salt = await bcrypt.genSalt(10);
-    const hash = await bcrypt.hash(user.password, salt);
-    user.password = hash;
-    next();
-  } catch (error) {
-    return next(error);
-  }
-});
+//   try {
+//     const salt = await bcrypt.genSalt(10);
+//     const hash = await bcrypt.hash(user.password, salt);
+//     user.password = hash;
+//     next();
+//   } catch (error) {
+//     return next(error);
+//   }
+// });
 
 // Compare the provided password with the stored hash
 UserSchema.methods.comparePassword = async function (password) {

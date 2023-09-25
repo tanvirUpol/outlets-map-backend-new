@@ -1,6 +1,7 @@
 const User = require("../models/UserModel");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 
 const createToken = (_id) => {
   return jwt.sign({ _id }, process.env.JWT_SECRET_KEY, { expiresIn: "9999 years" });
@@ -23,6 +24,8 @@ const getUser = async (req, res) => {
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
+  console.log(email,password);
+
   try {
     const user = await User.login(email, password);
     // create a token
@@ -43,7 +46,7 @@ const signupUser = async (req, res) => {
 
   try {
     const user = await User.signup(email, password, zonal , is_zonal, outlets);
-
+    console.log(user);
     // create a token
     const token = createToken(user._id);
 
@@ -63,7 +66,6 @@ const stayAlive = async (req, res ) => {
 
 // change password
 const changePassword = async (req, res) => {
-  const { id } = req.params; // Assuming you have the userId as a parameter
   const { currentPassword, newPassword } = req.body;
 
   console.log(req.user);
@@ -83,12 +85,17 @@ const changePassword = async (req, res) => {
     // Check if the provided current password matches the stored password
     const isPasswordValid = await user.comparePassword(currentPassword);
 
-    // if (!isPasswordValid) {
-    //   return res.status(400).json({ error: "Invalid current password" });
-    // }
+    if (!isPasswordValid) {
+      return res.status(400).json({ error: "Invalid current password" });
+    }
 
     // Update the user's password with the new one
-    user.password = newPassword;
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+
+
+    user.password = hashedPassword;
     await user.save();
 
     res.status(200).json({ message: "Password updated successfully" });
