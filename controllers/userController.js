@@ -1,6 +1,5 @@
 const User = require("../models/UserModel");
 const jwt = require("jsonwebtoken");
-const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 
 const createToken = (_id) => {
@@ -83,11 +82,11 @@ const changePassword = async (req, res) => {
     }
 
     // Check if the provided current password matches the stored password
-    const isPasswordValid = await user.comparePassword(currentPassword);
+    // const isPasswordValid = await user.comparePassword(currentPassword);
 
-    if (!isPasswordValid) {
-      return res.status(400).json({ error: "Invalid current password" });
-    }
+    // if (!isPasswordValid) {
+    //   return res.status(400).json({ error: "Invalid current password" });
+    // }
 
     // Update the user's password with the new one
     const salt = await bcrypt.genSalt(10);
@@ -103,6 +102,33 @@ const changePassword = async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 };
+
+
+// // with Email
+// const changePassword = async (req, res) => {
+//   const { newPassword , email } = req.body;
+
+
+//   try {
+//     const user = await User.findOne({ email });
+
+//     if (!user) {
+//       return res.status(404).json({ error: "User not found" });
+//     }
+
+//     const salt = await bcrypt.genSalt(10);
+//     const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+
+
+//     user.password = hashedPassword;
+//     await user.save();
+
+//     res.status(200).json({ message: "Password updated successfully" });
+//   } catch (err) {
+//     res.status(400).json({ error: err.message });
+//   }
+// };
 
 module.exports = {
   getUser,

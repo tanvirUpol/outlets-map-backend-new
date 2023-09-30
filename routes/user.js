@@ -5,15 +5,19 @@ const requireAuth = require("../middleware/requireAuth");
 // constroller functions
 const { signupUser, loginUser, stayAlive, getUser, changePassword } = require('../controllers/userController')
 
-// login route
+// profile route
 router.get('/profile', requireAuth, getUser)
 
 // login route
 router.post('/login', loginUser)
 
 
-// login route
+// pass change
 router.post('/changep/:id',requireAuth, changePassword)
+
+
+// pass change
+// router.post('/changepass', changePassword)
 
 // sign up route
 router.post('/signup', signupUser)
