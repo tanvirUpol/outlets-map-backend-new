@@ -1,11 +1,32 @@
 const User = require("../models/UserModel");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const nodemailer = require('nodemailer');
+const mongoose = require("mongoose");
 
 const createToken = (_id) => {
   return jwt.sign({ _id }, process.env.JWT_SECRET_KEY, { expiresIn: "9999 years" });
 };
 
+
+// Set up Nodemailer
+const transporter = nodemailer.createTransport({
+  host: 'smtp-relay.brevo.com',
+  port: 587,
+  // secure: false,
+  auth: {
+    user: 'tanvirrahmanupol@gmail.com',
+    pass: 'qI5gr8JDZ37TambK',
+  },
+});
+
+// Generate a random verification code
+function generateVerificationCode() {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+}
+
+// Store temporary verification codes in memory
+const verificationCodes = new Map();
 
 //get user
 const getUser = async (req, res) => {
@@ -20,21 +41,96 @@ const getUser = async (req, res) => {
 };
 
 // login user
+// const loginUser = async (req, res) => {
+//   const { email, password } = req.body;
+
+//   console.log(email,password);
+
+//   try {
+//     const user = await User.login(email, password);
+//     // create a token
+//     const token = createToken(user._id);
+
+//     res.status(200).json({ email, token });
+//   } catch (err) {
+//     res.status(400).json({ error: err.message });
+//   }
+// };
+
+
+//----------------------------
+
+// login user
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
-  console.log(email,password);
+  // console.log(email, password);
 
   try {
     const user = await User.login(email, password);
     // create a token
-    const token = createToken(user._id);
+    // const token = createToken(user._id);
 
-    res.status(200).json({ email, token });
+    console.log(user);
+
+    // Generate a new verification code
+    const verificationCode = generateVerificationCode();
+
+    // Send the verification code via email
+    const mailOptions = {
+      from: "tanvirrahmanupol@gmail.com",
+      to: email,
+      subject: "Verification Code",
+      text: `Your verification code is: ${verificationCode}`,
+    };
+
+    // res.status(200).json({ email, token });
+    transporter.sendMail(mailOptions, (error) => {
+      if (error) {
+        console.log(error);
+        return res.status(500).json({ message: 'Error sending verification code' });
+      }
+  
+      // Store the verification code in memory temporarily
+      verificationCodes.set(email, verificationCode);
+  
+      res.status(200).json({ message: `Verification code sent successfully to:${email} `, email });
+    });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 };
+
+//--------------------------------------
+
+
+const verifyUser = async (req,res) => {
+  const { email, verificationCode } = req.body;
+
+  const user = await User.findOne({ email})
+
+  
+
+  console.log(user);
+
+      // create a token
+    const token = createToken(user._id);
+
+  console.log(email,verificationCode);
+
+  // Retrieve the stored verification code for the given email
+  const storedVerificationCode = verificationCodes.get(email);
+  // const storedVerificationCode = 413123;
+
+  console.log(storedVerificationCode);
+
+  if (!storedVerificationCode || storedVerificationCode != verificationCode) {
+    return res.status(401).json({ message: 'Invalid verification code' });
+  }
+
+  // At this point, the user is successfully verified
+  res.status(200).json({ message: 'User verified successfully', email , token });
+}
 
 // signup user
 const signupUser = async (req, res) => {
@@ -135,5 +231,6 @@ module.exports = {
   loginUser,
   signupUser,
   stayAlive,
-  changePassword
+  changePassword,
+  verifyUser
 };

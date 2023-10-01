@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 
 // get all
 const getOutlets = async (req, res) => {
+  console.log(req.user);
   if(req.user.is_zonal === false){
     const outlets = await Outlet.find();
     res.status(200).json(outlets);

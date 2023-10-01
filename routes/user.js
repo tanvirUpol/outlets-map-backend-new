@@ -3,7 +3,7 @@ const router = express.Router();
 const requireAuth = require("../middleware/requireAuth");
 
 // constroller functions
-const { signupUser, loginUser, stayAlive, getUser, changePassword } = require('../controllers/userController')
+const { signupUser, loginUser, stayAlive, getUser, changePassword, verifyUser } = require('../controllers/userController')
 
 // profile route
 router.get('/profile', requireAuth, getUser)
@@ -14,6 +14,10 @@ router.post('/login', loginUser)
 
 // pass change
 router.post('/changep/:id',requireAuth, changePassword)
+
+
+// verify pass
+router.post('/verify', verifyUser)
 
 
 // pass change
