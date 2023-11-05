@@ -28,12 +28,11 @@ const getOutlet = async (req, res) => {
   if (!outlet) {
     return res.status(404).json({ error: "No such Outlet" });
   }
-
   res.status(200).json(outlet);
 };
 
-// create outlet
 
+// create outlet
 const uploadOutlets = async (req, res) => {
   try {
     // Delete all existing documents
