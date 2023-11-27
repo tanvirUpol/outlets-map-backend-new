@@ -76,6 +76,8 @@ const loginUser = async (req, res) => {
     // Generate a new verification code
     const verificationCode = generateVerificationCode();
 
+    console.log(verificationCode);
+
     // Send the verification code via email
     const mailOptions = {
       from: "tanvirrahmanupol@gmail.com",
@@ -86,6 +88,7 @@ const loginUser = async (req, res) => {
 
     // res.status(200).json({ email, token });
     transporter.sendMail(mailOptions, (error) => {
+      console.log(mailOptions);
       if (error) {
         console.log(error);
         return res
