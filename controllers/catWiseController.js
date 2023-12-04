@@ -82,6 +82,8 @@ const getSelectedFieldsForAllOutlet = async (req, res) => {
           outlet_code: "$data.outlet_code",
           format: "$data.format",
           cat_3: "$data.cat_3",
+          pos_gpv_this: "$data.pos_gpv_this",
+          pos_gpv_last: "$data.pos_gpv_last",
           gp_percent: {
             $multiply: [
               {
@@ -100,6 +102,21 @@ const getSelectedFieldsForAllOutlet = async (req, res) => {
               then: 0, // Set sales_contribution to 0 if totalSales is zero
               else: { $divide: ["$data.sales_this", "$totalSales"] },
             },
+          },
+          pos_gpv_growth: {
+            $cond: {
+              if: { $eq: ["$data.pos_gpv_last", 0] },
+              then: 0,
+              else: {
+                $divide: [
+                  { $subtract: ["$data.pos_gpv_this", "$data.pos_gpv_last"] },
+                  "$data.pos_gpv_last",
+                ],
+              },
+            },
+          },
+          pos_gpv_value: {
+            $subtract: ["$data.pos_gpv_this", "$data.pos_gpv_last"],
           },
         },
       }
