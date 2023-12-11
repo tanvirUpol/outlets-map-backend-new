@@ -17,18 +17,6 @@ const outletSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
-  // assortment: {
-  //   type: Number,
-  //   required: true
-  // },
-  // available: {
-  //   type: Number,
-  //   required: true
-  // },
-  // availability_percent: {
-  //   type: Number,
-  //   required: true
-  // },
   format: {
     type: String,
     required: true
